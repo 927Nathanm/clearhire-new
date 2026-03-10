@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Audit – ClearHire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --white: #fff; --off: #f9f8f6; --border: #e4e0d8;
+      --text: #1a1a1a; --muted: #6b6560; --subtle: #9c9690;
+      --blue: #1d4ed8; --blue-light: #eff6ff; --blue-dark: #1e40af;
+      --green: #15803d; --green-light: #f0fdf4;
+      --amber: #b45309; --amber-light: #fffbeb;
+      --red: #b91c1c; --red-light: #fef2f2;
+    }
+    body { font-family: 'Lato', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
+
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 4rem; border-bottom: 1px solid var(--border); background: var(--white); }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; text-decoration: none; color: var(--text); }
+    .logo span { color: var(--blue); }
+    .plan-badge { padding: 0.3rem 1rem; border-radius: 100px; font-size: 0.775rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+    .badge-basic { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; }
+    .badge-pro { background: var(--green-light); color: var(--green); border: 1px solid #bbf7d0; }
+
+    .main { max-width: 680px; margin: 0 auto; padding: 3.5rem 2rem; }
+
+    /* Plan info bar */
+    .plan-bar { display: flex; justify-content: space-between; align-items: center; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; gap: 0.75rem; }
+    .plan-bar-left { font-size: 0.875rem; font-weight: 700; }
+    .plan-bar-right { font-size: 0.8rem; color: var(--muted); }
+    .plan-bar-right span { color: var(--blue); font-weight: 700; }
+
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+    .page-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; font-weight: 300; }
+
+    .upload-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 2.5rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem; background: var(--white); position: relative; }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--blue); background: var(--blue-light); }
+    .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+    .upload-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+    .upload-hint { font-size: 0.825rem; color: var(--muted); }
+    .file-selected { color: var(--blue); font-size: 0.875rem; font-weight: 700; margin-top: 0.75rem; display: none; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .fg { display: flex; flex-direction: column; gap: 0.4rem; }
+    label { font-size: 0.775rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    input, select { padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 6px; background: var(--white); color: var(--text); font-family: 'Lato', sans-serif; font-size: 0.9rem; transition: border-color 0.2s; }
+    input:focus, select:focus { outline: none; border-color: var(--blue); }
+
+    /* Rewrite toggle — only shown for Pro */
+    .rewrite-toggle { display: none; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+    .rewrite-toggle.visible { display: flex; align-items: center; gap: 0.75rem; }
+    .toggle-switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 22px; cursor: pointer; transition: background 0.2s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform 0.2s; }
+    .toggle-switch input:checked + .toggle-slider { background: var(--blue); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+    .toggle-label { font-size: 0.875rem; font-weight: 700; }
+    .toggle-sub { font-size: 0.775rem; color: var(--muted); }
+
+    .submit-btn { width: 100%; padding: 1rem; background: var(--blue); color: var(--white); border: none; border-radius: 6px; font-family: 'Lato', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.5rem; }
+    .submit-btn:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(29,78,216,0.2); }
+
+    #error-msg { display: none; margin-bottom: 1rem; background: var(--red-light); border: 1px solid #fecaca; color: var(--red); padding: 0.9rem 1.25rem; border-radius: 6px; font-size: 0.875rem; }
+
+    /* Loading */
+    #loading { display: none; text-align: center; padding: 5rem 2rem; }
+    .spinner { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1.5rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .load-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .load-sub { color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem; }
+    .load-steps { display: flex; flex-direction: column; gap: 0.5rem; max-width: 280px; margin: 0 auto; text-align: left; }
+    .load-step { font-size: 0.825rem; color: var(--subtle); opacity: 0; animation: appear 0.4s ease forwards; }
+    .load-step:nth-child(1) { animation-delay: 2s; }
+    .load-step:nth-child(2) { animation-delay: 6s; }
+    .load-step:nth-child(3) { animation-delay: 11s; }
+    .load-step:nth-child(4) { animation-delay: 17s; }
+    @keyframes appear { to { opacity: 1; color: var(--blue); } }
+
+    /* Results */
+    #results { display: none; }
+    .act-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .act-btn { padding: 0.65rem 1.3rem; border-radius: 6px; font-size: 0.825rem; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--text); transition: all 0.2s; font-family: 'Lato', sans-serif; }
+    .act-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .act-btn.primary { background: var(--blue); border-color: var(--blue); color: var(--white); }
+    .act-btn.primary:hover { background: var(--blue-dark); }
+    .act-btn.green { background: var(--green); border-color: var(--green); color: var(--white); }
+    .act-btn.green:hover { background: #166534; }
+
+    .score-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 2rem; margin-bottom: 1.25rem; display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .big-score { text-align: center; min-width: 80px; }
+    .score-num { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; line-height: 1; }
+    .score-den { font-size: 0.85rem; color: var(--muted); }
+    .score-pill { display: inline-block; margin-top: 0.5rem; padding: 0.2rem 0.75rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .p-crit { background: var(--red-light); color: var(--red); border: 1px solid #fecaca; }
+    .p-needs { background: var(--amber-light); color: var(--amber); border: 1px solid #fcd34d; }
+    .p-avg { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+    .p-good { background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; }
+    .p-strong { background: var(--green-light); color: var(--green); border: 1px solid #bbf7d0; }
+    .p-excellent { background: var(--green-light); color: var(--green); border: 1px solid #86efac; }
+    .score-info { flex: 1; }
+    .score-info h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .score-info p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    .verdict-card { background: var(--blue-light); border: 1px solid #bfdbfe; border-left: 4px solid var(--blue); border-radius: 6px; padding: 1.1rem 1.5rem; margin-bottom: 1.25rem; font-size: 0.9rem; color: #1e3a8a; line-height: 1.65; }
+
+    .grades-row { display: grid; grid-template-columns: repeat(5,1fr); background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
+    .g-cell { padding: 1rem 0.4rem; text-align: center; border-right: 1px solid var(--border); }
+    .g-cell:last-child { border-right: none; }
+    .g-name { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.3rem; }
+    .g-letter { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; line-height: 1; }
+    .ga { color: var(--green); } .gb { color: var(--blue); } .gc { color: var(--amber); } .gd { color: #ea580c; } .gf { color: var(--red); }
+
+    .block-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.9rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    .section-item { background: var(--white); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem; margin-bottom: 0.75rem; transition: border-color 0.2s; }
+    .section-item:hover { border-color: #bfdbfe; }
+    .si-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
+    .si-name { font-weight: 700; font-size: 0.875rem; }
+    .si-grade { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+    .si-assess { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.65rem; }
+    .si-rec { background: var(--blue-light); border-left: 3px solid var(--blue); padding: 0.6rem 0.9rem; font-size: 0.825rem; color: var(--blue-dark); border-radius: 0 4px 4px 0; }
+    .si-rec::before { content: 'Recommendation: '; font-weight: 700; }
+
+    .gap-item { background: var(--white); border: 1px solid #fecaca; border-left: 3px solid var(--red); border-radius: 6px; padding: 0.9rem 1.1rem; font-size: 0.875rem; margin-bottom: 0.7rem; line-height: 1.6; display: flex; gap: 0.6rem; }
+    .act-item { background: var(--white); border: 1px solid #bbf7d0; border-left: 3px solid var(--green); border-radius: 6px; padding: 0.9rem 1.1rem; font-size: 0.875rem; margin-bottom: 0.7rem; line-height: 1.6; display: flex; gap: 0.6rem; }
+
+    .rewrite-block { background: var(--white); border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 2rem; margin-top: 2rem; }
+    .rewrite-block h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--blue); margin-bottom: 0.4rem; }
+    .rewrite-block p { font-size: 0.875rem; color: var(--muted); margin-bottom: 1rem; }
+    .rewrite-text { background: var(--off); border: 1px solid var(--border); border-radius: 6px; padding: 1.5rem; font-size: 0.875rem; line-height: 1.8; color: var(--text); white-space: pre-wrap; }
+
+    .upsell-block { background: var(--blue-light); border: 1.5px solid #bfdbfe; border-radius: 10px; padding: 2rem; text-align: center; margin-top: 2rem; }
+    .upsell-block h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .upsell-block p { font-size: 0.875rem; color: var(--muted); margin-bottom: 1.25rem; }
+    .upsell-btn { display: inline-block; padding: 0.85rem 2rem; background: var(--blue); color: var(--white); border-radius: 6px; font-weight: 700; font-size: 0.875rem; text-decoration: none; transition: background 0.2s; }
+    .upsell-btn:hover { background: var(--blue-dark); }
+
+    @media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } .grades-row { grid-template-columns: repeat(3,1fr); } nav { padding: 1rem 1.5rem; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Clear<span>Hire</span></a>
+  {% if plan == 'pro' %}
+    <span class="plan-badge badge-pro">✓ Pro — Lifetime Access</span>
+  {% else %}
+    <span class="plan-badge badge-basic">✓ Basic — 7 Days</span>
+  {% endif %}
+</nav>
+
+<div class="main">
+
+  <!-- UPLOAD FORM -->
+  <div id="upload-form">
+
+    <!-- Plan bar -->
+    <div class="plan-bar">
+      <div class="plan-bar-left">
+        {% if plan == 'pro' %}⭐ Pro Plan — Unlimited audits + rewrites, forever
+        {% else %}Basic Plan — Unlimited audits for 7 days{% endif %}
+      </div>
+      <div class="plan-bar-right">
+        {% if time_remaining %}<span>{{ time_remaining }}</span>{% elif plan == 'pro' %}<span>Lifetime access</span>{% endif %}
+      </div>
+    </div>
+
+    <h1 class="page-title">Upload your resume</h1>
+    <p class="page-sub">Get your detailed audit in about 30 seconds. Fix what it tells you, then re-upload and audit again.</p>
+
+    <div class="upload-zone" id="drop-zone">
+      <input type="file" id="resume-file" accept=".pdf,.txt">
+      <span class="upload-icon">📄</span>
+      <div class="upload-title">Click to upload or drag and drop</div>
+      <div class="upload-hint">PDF or TXT · Max 5MB</div>
+      <div class="file-selected" id="file-name"></div>
+    </div>
+
+    <div class="form-row">
+      <div class="fg">
+        <label>Target Role (optional)</label>
+        <input type="text" id="target-role" placeholder="e.g. Operations Manager">
+      </div>
+      <div class="fg">
+        <label>Experience Level</label>
+        <select id="exp-level">
+          <option value="entry">Entry Level (0–2 yrs)</option>
+          <option value="mid" selected>Mid Level (3–7 yrs)</option>
+          <option value="senior">Senior (8+ yrs)</option>
+          <option value="executive">Executive / Director</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Rewrite toggle — only visible for Pro users -->
+    {% if plan == 'pro' %}
+    <div class="rewrite-toggle visible" id="rewrite-toggle">
+      <label class="toggle-switch">
+        <input type="checkbox" id="rewrite-checkbox">
+        <span class="toggle-slider"></span>
+      </label>
+      <div>
+        <div class="toggle-label">Include AI resume rewrite</div>
+        <div class="toggle-sub">Get a fully rewritten version of your resume alongside the audit</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div id="error-msg"></div>
+    <button class="submit-btn" onclick="submitAudit()">Analyze My Resume</button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <div class="load-title">Analyzing your resume...</div>
+    <div class="load-sub">This takes about 20–40 seconds</div>
+    <div class="load-steps">
+      <div class="load-step">✓ Parsing resume content</div>
+      <div class="load-step">✓ Evaluating work experience</div>
+      <div class="load-step">✓ Checking ATS compatibility</div>
+      <div class="load-step">✓ Writing your audit report</div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results"></div>
+
+</div>
+
+<script>
+  const isPro = {{ 'true' if plan == 'pro' else 'false' }};
+
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('resume-file');
+  const fileNameEl = document.getElementById('file-name');
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) { fileNameEl.textContent = '✓ ' + fileInput.files[0].name; fileNameEl.style.display = 'block'; }
+  });
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('dragover');
+    const f = e.dataTransfer.files[0];
+    if (f) { const dt = new DataTransfer(); dt.items.add(f); fileInput.files = dt.files; fileNameEl.textContent = '✓ ' + f.name; fileNameEl.style.display = 'block'; }
+  });
+
+  async function submitAudit() {
+    if (!fileInput.files[0]) { showError('Please select your resume file first.'); return; }
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('upload-form').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+
+    const fd = new FormData();
+    fd.append('resume', fileInput.files[0]);
+    fd.append('target_role', document.getElementById('target-role').value);
+    fd.append('experience_level', document.getElementById('exp-level').value);
+
+    const rewriteCheckbox = document.getElementById('rewrite-checkbox');
+    fd.append('include_rewrite', rewriteCheckbox && rewriteCheckbox.checked ? 'true' : 'false');
+
+    try {
+      const res = await fetch('/analyze', { method: 'POST', body: fd });
+      const data = await res.json();
+      document.getElementById('loading').style.display = 'none';
+      if (data.error) { document.getElementById('upload-form').style.display = 'block'; showError(data.error); return; }
+      renderResults(data);
+    } catch {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('upload-form').style.display = 'block';
+      showError('Something went wrong. Please try again.');
+    }
+  }
+
+  function showError(msg) { const el = document.getElementById('error-msg'); el.textContent = msg; el.style.display = 'block'; }
+
+  function scoreColor(s) {
+    if (s < 30) return '#b91c1c'; if (s < 50) return '#b45309';
+    if (s < 65) return '#ea580c'; if (s < 80) return '#1d4ed8'; return '#15803d';
+  }
+  function pillClass(label) {
+    const l = (label||'').toLowerCase();
+    if (l.includes('critical')) return 'p-crit'; if (l.includes('needs')) return 'p-needs';
+    if (l.includes('average')) return 'p-avg'; if (l.includes('good')) return 'p-good';
+    if (l.includes('strong')) return 'p-strong'; if (l.includes('excellent')) return 'p-excellent';
+    return 'p-avg';
+  }
+  function gradeClass(g) {
+    const x = (g||'').toUpperCase().trim();
+    if (x==='A') return 'ga'; if (x==='B') return 'gb'; if (x==='C') return 'gc'; if (x==='D') return 'gd'; return 'gf';
+  }
+
+  function renderResults(d) {
+    window._audit = d;
+
+    const gradesHtml = (d.sections||[]).slice(0,5).map(s => `
+      <div class="g-cell">
+        <div class="g-name">${s.name.split(' ')[0]}</div>
+        <div class="g-letter ${gradeClass(s.grade)}">${s.grade}</div>
+      </div>`).join('');
+
+    const sectionsHtml = (d.sections||[]).map(s => `
+      <div class="section-item">
+        <div class="si-header"><span class="si-name">${s.name}</span><span class="si-grade ${gradeClass(s.grade)}">${s.grade}</span></div>
+        <div class="si-assess">${s.assessment}</div>
+        <div class="si-rec">${s.recommendation}</div>
+      </div>`).join('');
+
+    const gapsHtml = (d.critical_gaps||[]).map(g => `<div class="gap-item"><span>⚠</span><span>${g}</span></div>`).join('');
+    const actsHtml = (d.immediate_actions||[]).map(a => `<div class="act-item"><span>→</span><span>${a}</span></div>`).join('');
+
+    const rewriteHtml = d.rewritten_resume
+      ? `<div class="rewrite-block">
+           <h3>Your Rewritten Resume</h3>
+           <p>Optimized for ATS and hiring managers. Copy and paste into your document, then make any personal tweaks.</p>
+           <div class="rewrite-text">${d.rewritten_resume}</div>
+           <div class="act-row" style="margin-top:1rem">
+             <button class="act-btn green" onclick="copyRewrite()">Copy Rewritten Resume</button>
+           </div>
+         </div>`
+      : (isPro
+          ? '' // Pro user but didn't request rewrite — they can audit again with toggle on
+          : `<div class="upsell-block">
+               <h3>Want us to rewrite it for you?</h3>
+               <p>Upgrade to Pro and get a fully rewritten resume alongside every audit — unlimited times, forever.</p>
+               <a href="/" class="upsell-btn">Upgrade to Pro — $29 lifetime</a>
+             </div>`);
+
+    document.getElementById('results').innerHTML = `
+      <div class="act-row">
+        <button class="act-btn primary" onclick="auditAgain()">↑ Audit Another Version</button>
+        <button class="act-btn" onclick="copyAudit()">Copy Full Audit</button>
+        <button class="act-btn" onclick="window.print()">Print</button>
+      </div>
+      <div class="score-card">
+        <div class="big-score">
+          <div class="score-num" style="color:${scoreColor(d.score)}">${d.score}</div>
+          <div class="score-den">/100</div>
+          <span class="score-pill ${pillClass(d.score_label)}">${d.score_label}</span>
+        </div>
+        <div class="score-info">
+          <h2>Resume Audit</h2>
+          <p>${d.summary}</p>
+        </div>
+      </div>
+      ${d.honest_verdict ? `<div class="verdict-card"><strong>Verdict:</strong> ${d.honest_verdict}</div>` : ''}
+      <div class="grades-row">${gradesHtml}</div>
+      <div class="block-title">Section Breakdown</div>
+      ${sectionsHtml}
+      <div class="block-title">Critical Gaps</div>
+      ${gapsHtml}
+      <div class="block-title">Immediate Actions</div>
+      ${actsHtml}
+      ${rewriteHtml}
+    `;
+
+    document.getElementById('results').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function auditAgain() {
+    // Reset file input and show form again
+    fileInput.value = '';
+    fileNameEl.style.display = 'none';
+    fileNameEl.textContent = '';
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('upload-form').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyAudit() {
+    const d = window._audit; if (!d) return;
+    let t = `CLEARHIRE RESUME AUDIT\nScore: ${d.score}/100 — ${d.score_label}\n\n${d.summary}\n\nVerdict: ${d.honest_verdict}\n\nSECTION BREAKDOWN:\n`;
+    (d.sections||[]).forEach(s => { t += `\n${s.name} — ${s.grade}\n${s.assessment}\nRecommendation: ${s.recommendation}\n`; });
+    t += `\nCRITICAL GAPS:\n`; (d.critical_gaps||[]).forEach(g => { t += `• ${g}\n`; });
+    t += `\nIMMEDIATE ACTIONS:\n`; (d.immediate_actions||[]).forEach(a => { t += `• ${a}\n`; });
+    navigator.clipboard.writeText(t).then(() => { event.target.textContent = '✓ Copied!'; setTimeout(() => { event.target.textContent = 'Copy Full Audit'; }, 2000); });
+  }
+
+  function copyRewrite() {
+    const d = window._audit; if (!d?.rewritten_resume) return;
+    navigator.clipboard.writeText(d.rewritten_resume).then(() => { event.target.textContent = '✓ Copied!'; setTimeout(() => { event.target.textContent = 'Copy Rewritten Resume'; }, 2000); });
+  }
+</script>
+</body>
+</html>

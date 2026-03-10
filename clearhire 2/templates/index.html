@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ClearHire — Professional Resume Audit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --white: #ffffff; --off: #f9f8f6; --border: #e4e0d8;
+      --text: #1a1a1a; --muted: #6b6560; --subtle: #9c9690;
+      --blue: #1d4ed8; --blue-light: #eff6ff; --blue-dark: #1e40af;
+      --green: #15803d; --green-light: #f0fdf4;
+      --amber: #b45309; --amber-light: #fffbeb;
+      --red: #b91c1c; --red-light: #fef2f2;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: var(--white); color: var(--text); overflow-x: hidden; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 4rem;
+      background: rgba(255,255,255,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; text-decoration: none; color: var(--text); }
+    .logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: 0.875rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-btn { background: var(--blue); color: var(--white); padding: 0.6rem 1.4rem; border-radius: 6px; font-size: 0.875rem; font-weight: 700; border: none; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+    .nav-btn:hover { background: var(--blue-dark); }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 9rem 2rem 6rem; }
+    .eyebrow-pill { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--blue-light); color: var(--blue); border: 1px solid #bfdbfe; border-radius: 100px; padding: 0.35rem 1.1rem; font-size: 0.775rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 2.5rem; animation: up 0.5s ease both; }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6.5vw, 5rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.03em; max-width: 800px; margin-bottom: 1.75rem; animation: up 0.5s 0.06s ease both; }
+    h1 em { color: var(--blue); font-style: italic; }
+    .hero-desc { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--muted); max-width: 520px; line-height: 1.7; font-weight: 300; margin-bottom: 3rem; animation: up 0.5s 0.12s ease both; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 4rem; animation: up 0.5s 0.18s ease both; }
+    .btn-blue { background: var(--blue); color: var(--white); padding: 1rem 2.25rem; border-radius: 6px; font-size: 0.95rem; font-weight: 700; border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-blue:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(29,78,216,0.22); }
+    .btn-outline { background: transparent; color: var(--text); padding: 1rem 2.25rem; border-radius: 6px; font-size: 0.95rem; font-weight: 700; border: 1.5px solid var(--border); cursor: pointer; text-decoration: none; transition: all 0.2s; }
+    .btn-outline:hover { border-color: var(--text); }
+    .trust-row { display: flex; gap: 2.5rem; flex-wrap: wrap; justify-content: center; animation: up 0.5s 0.24s ease both; }
+    .trust-item { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; color: var(--muted); }
+    .trust-check { color: var(--blue); font-weight: 700; }
+
+    /* SAMPLE */
+    .sample { padding: 7rem 2rem; background: var(--off); }
+    .inner { max-width: 960px; margin: 0 auto; }
+    .section-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 1rem; }
+    .section-h { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; line-height: 1.15; }
+    .section-p { color: var(--muted); font-size: 1rem; margin-bottom: 3rem; font-weight: 300; }
+    .report-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
+    .rc-top { padding: 2rem 2.5rem; display: flex; gap: 2rem; align-items: flex-start; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .rc-score { text-align: center; min-width: 90px; }
+    .rc-num { font-family: 'Playfair Display', serif; font-size: 3.2rem; font-weight: 700; line-height: 1; color: var(--amber); }
+    .rc-denom { font-size: 0.85rem; color: var(--muted); }
+    .rc-badge { display: inline-block; margin-top: 0.5rem; background: var(--amber-light); color: var(--amber); border: 1px solid #fcd34d; padding: 0.2rem 0.75rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .rc-info { flex: 1; }
+    .rc-info h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .rc-info p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .grades { display: grid; grid-template-columns: repeat(5,1fr); border-bottom: 1px solid var(--border); }
+    .g-cell { padding: 1.1rem 0.5rem; text-align: center; border-right: 1px solid var(--border); }
+    .g-cell:last-child { border-right: none; }
+    .g-name { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.3rem; }
+    .g-letter { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .ga { color: var(--green); } .gb { color: var(--blue); } .gc { color: var(--amber); } .gd { color: #ea580c; } .gf { color: var(--red); }
+    .rc-verdict { padding: 1.1rem 2.5rem; background: #fafafa; font-size: 0.9rem; color: var(--muted); font-style: italic; }
+    .rc-verdict strong { color: var(--text); font-style: normal; }
+
+    /* HOW */
+    .how { padding: 7rem 2rem; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1.5rem; margin-top: 3.5rem; }
+    .step { padding: 2rem; border: 1px solid var(--border); border-radius: 8px; background: var(--white); transition: all 0.25s; }
+    .step:hover { border-color: var(--blue); box-shadow: 0 6px 24px rgba(29,78,216,0.08); transform: translateY(-3px); }
+    .step-icon { width: 42px; height: 42px; background: var(--blue-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 1.1rem; }
+    .step h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .step p { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+
+    /* PRICING */
+    .pricing { padding: 7rem 2rem; background: var(--off); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px,1fr)); gap: 1.5rem; max-width: 740px; margin: 3.5rem auto 0; }
+    .pc { background: var(--white); border: 1.5px solid var(--border); border-radius: 10px; padding: 2.5rem 2rem; transition: all 0.25s; position: relative; }
+    .pc:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.07); }
+    .pc.feat { border-color: var(--blue); }
+    .pop-tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: var(--white); padding: 0.25rem 1rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+    .pc-tier { font-size: 0.775rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+    .pc-price { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.2rem; }
+    .pc-note { font-size: 0.825rem; color: var(--muted); margin-bottom: 2rem; }
+    .pc-list { list-style: none; margin-bottom: 2rem; }
+    .pc-list li { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.45rem 0; font-size: 0.875rem; border-bottom: 1px solid var(--border); }
+    .pc-list li:last-child { border-bottom: none; }
+    .chk { color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .pc-btn { width: 100%; padding: 0.9rem; border-radius: 6px; font-size: 0.875rem; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: transparent; color: var(--text); transition: all 0.2s; font-family: 'Lato', sans-serif; }
+    .pc-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .pc.feat .pc-btn { background: var(--blue); border-color: var(--blue); color: var(--white); }
+    .pc.feat .pc-btn:hover { background: var(--blue-dark); }
+
+    /* TESTIMONIALS */
+    .testimonials { padding: 7rem 2rem; }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 1.5rem; margin-top: 3.5rem; }
+    .tc { background: var(--off); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; }
+    .stars { color: #f59e0b; font-size: 0.875rem; letter-spacing: 2px; margin-bottom: 1rem; }
+    .tc-text { font-size: 0.9rem; line-height: 1.75; color: var(--muted); margin-bottom: 1.25rem; font-style: italic; }
+    .tc-name { font-weight: 700; font-size: 0.85rem; }
+    .tc-role { font-size: 0.775rem; color: var(--subtle); margin-top: 0.15rem; }
+
+    /* FAQ */
+    .faq { padding: 6rem 2rem; background: var(--off); }
+    .faq-list { max-width: 640px; margin: 3rem auto 0; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 1.4rem 0; }
+    .faq-q { font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .faq-q::after { content: '+'; font-size: 1.3rem; color: var(--blue); transition: transform 0.2s; flex-shrink: 0; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { display: none; font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-top: 0.75rem; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* CTA */
+    .cta { padding: 8rem 2rem; text-align: center; background: var(--text); color: var(--white); }
+    .cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.25rem; line-height: 1.1; }
+    .cta h2 em { color: #93c5fd; font-style: italic; }
+    .cta p { color: rgba(255,255,255,0.5); margin-bottom: 2.5rem; font-size: 1rem; font-weight: 300; }
+    .btn-white { background: var(--white); color: var(--blue); padding: 1rem 2.5rem; border-radius: 6px; font-size: 1rem; font-weight: 700; border: none; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.2s; }
+    .btn-white:hover { background: #f1f5f9; transform: translateY(-1px); }
+
+    footer { padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--border); flex-wrap: wrap; gap: 1rem; }
+    .cancel-bar { background: #fff7ed; border-bottom: 1px solid #fed7aa; padding: 0.75rem 2rem; text-align: center; font-size: 0.875rem; color: #9a3412; }
+
+    @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .nav-links { display: none; } .grades { grid-template-columns: repeat(3,1fr); } footer { padding: 1.5rem; } }
+  </style>
+</head>
+<body>
+
+{% if request.args.get('cancelled') %}
+<div class="cancel-bar">Payment was cancelled — no charge was made.</div>
+{% endif %}
+
+<nav>
+  <a href="/" class="logo">Clear<span>Hire</span></a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#sample">Sample report</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <a href="#pricing" class="nav-btn" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'});return false;">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow-pill">✦ Professional Resume Analysis</div>
+  <h1>Find out <em>exactly</em> why your<br>resume isn't getting responses</h1>
+  <p class="hero-desc">Upload your resume and receive a detailed, honest professional audit in under 60 seconds. Fix it. Re-audit. Repeat until you get the interview.</p>
+  <div class="hero-btns">
+    <button class="btn-blue" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started — from $9</button>
+    <button class="btn-outline" onclick="document.getElementById('sample').scrollIntoView({behavior:'smooth'})">View Sample Report</button>
+  </div>
+  <div class="trust-row">
+    <div class="trust-item"><span class="trust-check">✓</span> Results in 60 seconds</div>
+    <div class="trust-item"><span class="trust-check">✓</span> Specific to your resume</div>
+    <div class="trust-item"><span class="trust-check">✓</span> Re-audit after you fix it</div>
+    <div class="trust-item"><span class="trust-check">✓</span> One-time payment</div>
+  </div>
+</section>
+
+<!-- SAMPLE -->
+<section class="sample" id="sample">
+  <div class="inner">
+    <div class="section-tag">Sample Report</div>
+    <h2 class="section-h">What your audit looks like</h2>
+    <p class="section-p">Every audit references your actual resume content — not generic advice.</p>
+    <div class="report-card">
+      <div class="rc-top">
+        <div class="rc-score">
+          <div class="rc-num">47</div>
+          <div class="rc-denom">/100</div>
+          <span class="rc-badge">Needs Work</span>
+        </div>
+        <div class="rc-info">
+          <h3>David K. — Operations Manager Resume</h3>
+          <p>This resume describes job duties rather than accomplishments — the most common reason qualified candidates are passed over. The formatting is clean, but the content doesn't differentiate you. A recruiter reading this knows what you were responsible for. They don't know what you achieved.</p>
+        </div>
+      </div>
+      <div class="grades">
+        <div class="g-cell"><div class="g-name">Formatting</div><div class="g-letter gb">B</div></div>
+        <div class="g-cell"><div class="g-name">Experience</div><div class="g-letter gd">D</div></div>
+        <div class="g-cell"><div class="g-name">Skills</div><div class="g-letter gc">C</div></div>
+        <div class="g-cell"><div class="g-name">Education</div><div class="g-letter gb">B</div></div>
+        <div class="g-cell"><div class="g-name">Overall</div><div class="g-letter gc">C</div></div>
+      </div>
+      <div class="rc-verdict"><strong>Verdict:</strong> "Your experience is real — your resume just doesn't make a case for it. Rewriting three bullet points with measurable outcomes would move this from a pass to a callback."</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="inner">
+    <div class="section-tag">Process</div>
+    <h2 class="section-h">Audit. Fix. Re-audit. Repeat.</h2>
+    <p class="section-p">The only resume tool that lets you keep checking until your resume is actually good.</p>
+    <div class="steps">
+      <div class="step"><div class="step-icon">💳</div><h3>Pay once</h3><p>$9 for 7 days of unlimited audits, or $29 for lifetime access with rewrites. No subscription.</p></div>
+      <div class="step"><div class="step-icon">📄</div><h3>Upload your resume</h3><p>PDF or TXT. Tell us your target role for more specific feedback.</p></div>
+      <div class="step"><div class="step-icon">📊</div><h3>Get your audit</h3><p>Score, letter grades per section, specific gaps, and immediate actions in about 30 seconds.</p></div>
+      <div class="step"><div class="step-icon">🔄</div><h3>Fix and re-audit</h3><p>Make the changes, upload your updated resume, and see your score improve. Keep going until it's right.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div style="max-width:740px;margin:0 auto;text-align:center">
+    <div class="section-tag">Pricing</div>
+    <h2 class="section-h">Simple, one-time pricing</h2>
+    <p class="section-p">No subscriptions. No recurring charges. Pay once and use it.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pc">
+      <div class="pc-tier">Basic</div>
+      <div class="pc-price">$9</div>
+      <div class="pc-note">one-time · 7 days of unlimited audits</div>
+      <ul class="pc-list">
+        <li><span class="chk">✓</span> Unlimited audits for 7 days</li>
+        <li><span class="chk">✓</span> Overall score out of 100</li>
+        <li><span class="chk">✓</span> Letter grade per section (A–F)</li>
+        <li><span class="chk">✓</span> Top 3 critical gaps</li>
+        <li><span class="chk">✓</span> Immediate action items</li>
+        <li><span class="chk">✓</span> Re-audit after every fix</li>
+      </ul>
+      <form method="POST" action="/create-checkout-session">
+        <input type="hidden" name="plan" value="basic">
+        <button type="submit" class="pc-btn">Get Basic — $9</button>
+      </form>
+    </div>
+    <div class="pc feat">
+      <div class="pop-tag">Best Value</div>
+      <div class="pc-tier">Pro</div>
+      <div class="pc-price">$29</div>
+      <div class="pc-note">one-time · lifetime unlimited access</div>
+      <ul class="pc-list">
+        <li><span class="chk">✓</span> Unlimited audits forever</li>
+        <li><span class="chk">✓</span> Everything in Basic</li>
+        <li><span class="chk">✓</span> Full AI resume rewrite</li>
+        <li><span class="chk">✓</span> ATS-optimized formatting</li>
+        <li><span class="chk">✓</span> Impact-focused bullet points</li>
+        <li><span class="chk">✓</span> Use it for every job application</li>
+      </ul>
+      <form method="POST" action="/create-checkout-session">
+        <input type="hidden" name="plan" value="pro">
+        <button type="submit" class="pc-btn">Get Pro — $29</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="inner">
+    <div class="section-tag">Results</div>
+    <h2 class="section-h">People who fixed their resume — then got hired</h2>
+    <div class="testi-grid">
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p class="tc-text">"I audited my resume, fixed the bullet points, re-audited, and my score went from 41 to 78 in one afternoon. Got two callbacks the following week after months of silence."</p>
+        <div class="tc-name">Robert M., 47</div>
+        <div class="tc-role">Operations Director, Dallas</div>
+      </div>
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p class="tc-text">"The re-audit feature is what sold me. I could actually see my score go up as I made the changes it recommended. Went from a C to a B+ in about an hour."</p>
+        <div class="tc-name">Sandra K., 52</div>
+        <div class="tc-role">Finance Manager, Atlanta</div>
+      </div>
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p class="tc-text">"Got the Pro plan. Used the rewrite as a starting point, tweaked it myself, then re-audited three times until I was happy. Best $29 I've spent on my job search."</p>
+        <div class="tc-name">James T., 38</div>
+        <div class="tc-role">Project Manager, Phoenix</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div style="max-width:640px;margin:0 auto;text-align:center">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-h">Common questions</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">How does the 7-day re-audit work?</div>
+      <div class="faq-a">After purchasing the Basic plan, you can upload and audit your resume as many times as you want for 7 days. Fix what it tells you, re-upload the updated version, and see your score improve. No limit on how many times you audit.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What does "lifetime" mean for the Pro plan?</div>
+      <div class="faq-a">Pay once and you can audit your resume unlimited times forever — across multiple job searches, career changes, or promotions. You also get unlimited AI rewrites on every audit.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is the feedback specific to my resume?</div>
+      <div class="faq-a">Yes. The analysis reads your actual content and references specific sections, wording, and gaps. You won't receive generic tips — you'll get feedback like "your bullet points under Company X describe tasks, not outcomes."</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What file formats are accepted?</div>
+      <div class="faq-a">PDF and plain text (.txt). If your PDF isn't reading correctly, open it in Word or Google Docs and export as plain text, then upload that file.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is my resume stored or shared?</div>
+      <div class="faq-a">No. Your resume is processed in real time and not stored on our servers.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if I'm not satisfied?</div>
+      <div class="faq-a">Email us at support@clearhire.ai and we'll make it right.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Audit it. Fix it.<br><em>Get the interview.</em></h2>
+  <p>The only resume tool that lets you keep improving until your resume actually works.</p>
+  <button class="btn-white" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started — from $9</button>
+</section>
+
+<footer>
+  <div>© 2026 ClearHire · Professional Resume Analysis</div>
+  <a href="mailto:support@clearhire.ai" style="color:var(--muted);text-decoration:none">support@clearhire.ai</a>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!open) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
