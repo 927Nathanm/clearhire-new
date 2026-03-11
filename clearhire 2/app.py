@@ -285,6 +285,16 @@ Return ONLY a raw JSON object — no markdown, no explanation, no code fences. E
     return jsonify(result)
 
 
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
+
 @app.route("/session-status")
 def session_status():
     """Frontend can poll this to check if session is still valid."""
